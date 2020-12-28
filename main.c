@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////////
 /*
-      TP3 - 2020
+      TP4 - 2020
       "Un escaner elemental"
 
       INTEGRANTES: 
@@ -11,43 +11,22 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
-#include <stdlib.h>
+#include "parser.h"
 #include "scanner.h"
-#include "tokens.h"
+extern int yynerrs;
 
-//char *token_names[] = {"", "Identificador\t\t", "Constante\t\t", "Asignación", "identificador inválido: ", "constante inválida: ", "cadena desconocida: ","Fin de archivo"};
 int main() {
+	int parser = yyparse();
 
-	TOKEN t;
-
-	while ((t = yylex()) != FDT){
-		switch(t){
-			case CARACTER_VALIDO:
-						printf("Token: '%c'\n", yytext[0]);
-						break;
-			case PALABRA_RESERVADA:
-						printf("Token: palabra reservada %s\n", yytext);
-						break;
-			case ASIGNACION:
-						printf("Token: Asignación\n");
-						break;
-			case IDENTIFICADOR:
-						printf("Token: Identificador\t\tlexema: %s\n", yytext);
-						break;
-			case CONSTANTE:
-						printf("Token: Constante\t\tlexema: %s\n", yytext);
-						break;
-			case IDENTIFICADOR_INVALIDO:
-						printf("Error léxico: identificador inválido: %s\n", yytext);
-						break;
-			case CONSTANTE_INVALIDA:
-						printf("Error léxico: constante inválida: %s\n", yytext);
-						break;
-			case CADENA_DESCONOCIDA:
-						printf("Error léxico: cadena desconocida: %s\n", yytext);
-						break;
-			default:
-						return 0;
+	switch(parser){
+		case 0:
+			puts("Compilacion terminada con exito");
+		case 1:
+			puts("Errores de compilación");
+		case 2:
+			puts("Memoria insuficiente");
 		}
-	} 		printf("Token: Fin de archivo \n"); // Esta re mal esto jaja, mañana lo reviso bien. Esto es para que a lo ultimo aparezca el fin de archivo
+
+	printf("Errores sintácticos: %d - Errores léxicos: %d\n",yynerrs,errlex);
+	return parser;
 }
