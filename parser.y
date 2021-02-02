@@ -15,7 +15,7 @@ extern int errlex; 	/* Contador de Errores Léxicos */
 
 %start programa /* El no terminal que es AXIOMA de la gramatica del TP2 */
 
-%token PROGRAMA FIN VARIABLES CODIGO DECLARAR LEER ESCRIBIR CONSTANTE IDENTIFICADOR
+%token PROGRAMA FIN_PROG DECLARAR LEER ESCRIBIR CONSTANTE IDENTIFICADOR
 %token ASIGNACION "<-"
 
 %left  '+'  '-'
@@ -24,41 +24,44 @@ extern int errlex; 	/* Contador de Errores Léxicos */
 
 %%
 
-    programa : inicio listaSentencias fin-prog
+programa : PROGRAMA listaSentencias FIN_PROG             {if (errlex+yynerrs > 0) YYABORT;else YYACCEPT;}
 
-    listaSentencias :   %empty
-                    |   sentencia
-                    |   listaSentencias sentencia
+listaSentencias :               %empty
+                            |   sentencia
+                            |   listaSentencias sentencia
+                            ;
 
-    sentencia :
-    leer ( listaIdentificadores ) ;
-    escribir ( listaExpresiones ) ;
-    declarar identificador ;
-    identificador <- expresión ;
+sentencia       :               LEER '(' listaIdentificadores ')' ';'           {printf("leer\n");}
+                            |   ESCRIBIR '(' listaExpresiones ')' ';'           {printf("escribir\n");}
+                            |   DECLARAR '(' IDENTIFICADOR ')' ';'              {printf("declarar %s\n",$3);}
+                            |   IDENTIFICADOR "<-" expresion ';'                {printf("asignacion\n");}
+                            ;
 
-    listaIdentificadores :
-    identificador
-    listaIdentificadores , identificador
+listaIdentificadores :          IDENTIFICADOR
+                            |   listaIdentificadores ',' IDENTIFICADOR
+                            ;
 
-    listaExpresiones :
-    	expresión
-    	listaExpresiones , expresión
+listaExpresiones :   	        expresion
+                            |   listaExpresiones ',' expresion
+                            ;
 
-    expresión :
-    	término
-    	expresión operador-suma término
+expresion :                 	termino
+    	                    |   expresion '+' termino                          {printf("suma\n");}
+    	                    |   expresion '-' termino                          {printf("resta\n");}
+                            ;
 
-    término :
-    	factor
-    	término operador-producto factor
+termino :                       factor
+    	                    |   termino '*' factor                             {printf("multiplicacion\n");}
+    	                    |   termino '/' factor                             {printf("division\n");}
+                            ;
 
-    factor :
-    	número
-    	identificador
-    	( expresión )
-    	- expresión
+factor :                    	CONSTANTE
+    	                    |   IDENTIFICADOR
+    	                    |   '(' expresion ')'                              {printf("paréntesis\n");}
+    	                    |   '-' expresion                                  {printf("inversion\n");}
+                            ;
 %%
-/* Informa la ocurrencia de un error. */
+
 void yyerror(const char *error){
         printf("línea #%d  %s\n", yylineno, error);
         return;
