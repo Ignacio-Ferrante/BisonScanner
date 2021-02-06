@@ -45,20 +45,14 @@ listaExpresiones :   	        expresion
                             |   listaExpresiones ',' expresion
                             ;
 
-expresion :                 	termino
-    	                    |   expresion '+' termino                          {printf("suma\n");}
-    	                    |   expresion '-' termino                          {printf("resta\n");}
-                            ;
-
-termino :                       factor
-    	                    |   termino '*' factor                             {printf("multiplicacion\n");}
-    	                    |   termino '/' factor                             {printf("division\n");}
-                            ;
-
-factor :                    	CONSTANTE
+expresion :                 	CONSTANTE
     	                    |   IDENTIFICADOR
-    	                    |   '(' expresion ')'                              {printf("paréntesis\n");}
-    	                    |   '-' expresion                                  {printf("inversion\n");}
+    	                    |   '(' expresion ')'                               {printf("paréntesis\n");}
+    	                    |   '-' expresion   %prec NEG                       {printf("inversion\n");}
+    	                    |   expresion '+' expresion                         {printf("suma\n");}
+    	                    |   expresion '-' expresion                         {printf("resta\n");}
+                            |   expresion '*' expresion                         {printf("multiplicacion\n");}
+    	                    |   expresion '/' expresion                         {printf("division\n");}
                             ;
 %%
 
