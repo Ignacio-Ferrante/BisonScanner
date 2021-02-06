@@ -24,7 +24,7 @@ extern int errlex; 	/* Contador de Errores Léxicos */
 
 %%
 
-programa : PROGRAMA listaSentencias FIN_PROG             {if (errlex+yynerrs > 0) YYABORT;else YYACCEPT;}
+programa : PROGRAMA listaSentencias FIN_PROG             {if (errlex || yynerrs) YYABORT; else YYACCEPT;}
 
 listaSentencias :               %empty
                             |   sentencia
@@ -57,6 +57,6 @@ expresion :                 	CONSTANTE
 %%
 
 void yyerror(const char *error){
-        printf("línea #%d  %s\n", yylineno, error);
+        printf("Linea #%d: %s\n", yylineno, error);
         return;
 }

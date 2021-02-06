@@ -13,7 +13,8 @@
 #include <stdio.h>
 #include "parser.h"
 #include "scanner.h"
-extern int yynerrs;
+
+extern int yynerrs = 0;
 
 int main() {
 	int parser = yyparse();
