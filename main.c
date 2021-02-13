@@ -21,10 +21,13 @@ int main() {
 	switch(parser){
 		case 0:
 			puts("Compilacion terminada con exito");
+		break;
 		case 1:
 			puts("Errores de compilación");
+		break;
 		case 2:
 			puts("Memoria insuficiente");
+		break;
 		}
 
 	printf("Errores sintácticos: %d - Errores léxicos: %d\n", yynerrs, errlex);
