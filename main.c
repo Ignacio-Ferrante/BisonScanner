@@ -14,11 +14,10 @@
 #include "parser.h"
 #include "scanner.h"
 
-extern int yynerrs = 0;
+extern int yynerrs;
 
 int main() {
 	int parser = yyparse();
-
 	switch(parser){
 		case 0:
 			puts("Compilacion terminada con exito");
@@ -28,6 +27,6 @@ int main() {
 			puts("Memoria insuficiente");
 		}
 
-	printf("Errores sintácticos: %d - Errores léxicos: %d\n",yynerrs,errlex);
+	printf("Errores sintácticos: %d - Errores léxicos: %d\n", yynerrs, errlex);
 	return parser;
 }

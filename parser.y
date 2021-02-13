@@ -26,12 +26,11 @@ extern int errlex; 	/* Contador de Errores Léxicos */
 
 programa : PROGRAMA listaSentencias FIN_PROG             {if (errlex || yynerrs) YYABORT; else YYACCEPT;}
 
-listaSentencias :               %empty
-                            |   sentencia
-                            |   listaSentencias sentencia
-                            ;
+listaSentencias	:	   %empty
+                	|  listaSentencias sentencia
+                         ;
 
-sentencia       :               LEER '(' listaIdentificadores ')' ';'           {printf("leer\n");}
+sentencia	:               LEER '(' listaIdentificadores ')' ';'           {printf("leer\n");}
                             |   ESCRIBIR '(' listaExpresiones ')' ';'           {printf("escribir\n");}
                             |   DECLARAR '(' IDENTIFICADOR ')' ';'              {printf("declarar %s\n",$3);}
                             |   IDENTIFICADOR "<-" expresion ';'                {printf("asignacion\n");}
@@ -41,10 +40,10 @@ listaIdentificadores :          IDENTIFICADOR
                             |   listaIdentificadores ',' IDENTIFICADOR
                             ;
 
-listaExpresiones :   	        expresion
+listaExpresiones :   	         expresion
                             |   listaExpresiones ',' expresion
                             ;
-
+                            
 expresion :                 	CONSTANTE
     	                    |   IDENTIFICADOR
     	                    |   '(' expresion ')'                               {printf("paréntesis\n");}
@@ -54,6 +53,8 @@ expresion :                 	CONSTANTE
                             |   expresion '*' expresion                         {printf("multiplicacion\n");}
     	                    |   expresion '/' expresion                         {printf("division\n");}
                             ;
+
+
 %%
 
 void yyerror(const char *error){
