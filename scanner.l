@@ -16,7 +16,6 @@ letraDigito         [[:alnum:]]
 identificador       {letra}{letraDigito}*
 asignacion          <-
 comentario          ##.*$
-digitoInvalido      [[:^digit:]]{-}[[:space:]]
 charDesconocido     [[:punct:]]{-}[().,+\-*/;]
 
 %%
